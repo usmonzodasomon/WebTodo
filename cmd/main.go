@@ -38,5 +38,6 @@ func main() {
 	fmt.Println("Shutting down")
 	if err := MyServer.Shutdown(context.Background()); err != nil {
 		l.Printf("Error server shutting down: %s", err.Error())
+		// comment
 	}
 }
