@@ -3,18 +3,28 @@ package repository
 import (
 	"fmt"
 	"webtodo/models"
+
+	"gorm.io/gorm"
 )
 
 var ErrTaskNotFound = fmt.Errorf("task not found")
 
-func AddTask(task *models.Task) (uint, error) {
+type TodoPostgres struct {
+	db *gorm.DB
+}
+
+func NewTodoPostgres(db *gorm.DB) *TodoPostgres {
+	return &TodoPostgres{db}
+}
+
+func (r *TodoPostgres) Add(task *models.Task) (uint, error) {
 	if err := GetDBConn().Create(&task).Error; err != nil {
 		return 0, err
 	}
 	return task.Id, nil
 }
 
-func GetAllTasks(userId uint) ([]*models.Task, error) {
+func (r *TodoPostgres) GetAllTasks(userId uint) ([]*models.Task, error) {
 	var tasks []*models.Task
 	if err := GetDBConn().Where("user_id = ?", userId).Find(&tasks).Error; err != nil {
 		return nil, err
@@ -22,14 +32,14 @@ func GetAllTasks(userId uint) ([]*models.Task, error) {
 	return tasks, nil
 }
 
-func ReassignTask(taskID, userID uint) error {
+func (r *TodoPostgres) ReassignTask(taskID, userID uint) error {
 	if err := GetDBConn().Exec("CALL reassign_task(?, ?)", taskID, userID).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetTaskById(id, userId uint) (*models.Task, error) {
+func (r *TodoPostgres) GetTaskById(id, userId uint) (*models.Task, error) {
 	var task models.Task
 	if err := GetDBConn().Where("id = ? AND user_id = ?", id, userId).First(&task).Error; err != nil {
 		return nil, err
@@ -37,7 +47,7 @@ func GetTaskById(id, userId uint) (*models.Task, error) {
 	return &task, nil
 }
 
-func GetExpiredTasksByUser(userId uint) ([]int, error) {
+func (r *TodoPostgres) GetExpiredTasksByUser(userId uint) ([]int, error) {
 	tasks := []int{}
 	if err := GetDBConn().Raw("SELECT get_expired_tasks_by_user(?)", userId).Scan(&tasks).Error; err != nil {
 		return nil, err
@@ -59,7 +69,7 @@ func GetExpiredTasksByUser(userId uint) ([]int, error) {
 // 	return nil
 // }
 
-func DeleteTask(id, userId uint) error {
+func (r *TodoPostgres) DeleteTask(id, userId uint) error {
 	if err := GetDBConn().Where("user_id = ? AND id = ?", userId, id).Delete(&models.Task{}).Error; err != nil {
 		return err
 	}

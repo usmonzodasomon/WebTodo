@@ -5,10 +5,24 @@ import (
 	"errors"
 	"fmt"
 	"time"
+	"webtodo/models"
 	"webtodo/pkg/repository"
 
 	"github.com/dgrijalva/jwt-go"
 )
+
+type AuthService struct {
+	repo repository.Authorization
+}
+
+func NewAuthService(repo repository.Authorization) *AuthService {
+	return &AuthService{repo}
+}
+
+func (s *AuthService) AddUser(user *models.User) (uint, error) {
+	user.Password = generatePasswordHash(user.Password)
+	return s.repo.AddUser(user)
+}
 
 type tokenClaims struct {
 	jwt.StandardClaims
@@ -22,8 +36,8 @@ func generatePasswordHash(pass string) string {
 	return fmt.Sprintf("%x", hash)
 }
 
-func GenerateToken(username, password string) (string, error) {
-	id, err := repository.GetUserByUserAndPassword(username, generatePasswordHash(password))
+func (s *AuthService) GenerateToken(username, password string) (string, error) {
+	id, err := s.repo.GetUser(username, generatePasswordHash(password))
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +51,7 @@ func GenerateToken(username, password string) (string, error) {
 	return token.SignedString([]byte(signingKey))
 }
 
-func ParseToken(tokenString string) (uint, error) {
+func (s *AuthService) ParseToken(tokenString string) (uint, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &tokenClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")
@@ -52,10 +66,6 @@ func ParseToken(tokenString string) (uint, error) {
 	if !ok {
 		return 0, errors.New("token claims are not of type of *tokenClaims")
 	}
-
-	// if time.Now().Unix() > claims.ExpiresAt {
-	// 	return 0, errors.New("token expired")
-	// }
 
 	return claims.UserId, nil
 }

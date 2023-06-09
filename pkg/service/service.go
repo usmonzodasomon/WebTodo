@@ -1,14 +1,14 @@
-package repository
+package service
 
 import (
 	"webtodo/models"
-
-	"gorm.io/gorm"
+	"webtodo/pkg/repository"
 )
 
 type Authorization interface {
 	AddUser(user *models.User) (uint, error)
-	GetUser(username, password string) (uint, error)
+	GenerateToken(username, password string) (string, error)
+	ParseToken(tokenString string) (uint, error)
 }
 
 type Todo interface {
@@ -20,14 +20,14 @@ type Todo interface {
 	DeleteTask(id, userId uint) error
 }
 
-type Repository struct {
+type Service struct {
 	Authorization
 	Todo
 }
 
-func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{
-		Authorization: NewAuthPostgres(db),
-		Todo:          NewTodoPostgres(db),
+func NewService(repos *repository.Repository) *Service {
+	return &Service{
+		Authorization: NewAuthService(repos.Authorization),
+		Todo:          NewTodoService(repos.Todo),
 	}
 }
