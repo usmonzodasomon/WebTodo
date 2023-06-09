@@ -1,1 +1,9 @@
 port: "9191"
+
+db:
+  host: "localhost"
+  port: "5432"
+  username: "postgres"
+  password: "postgres"
+  dbname: "todo_list_db"
+  sslmode: "disable"

@@ -3,7 +3,6 @@ package repository
 import (
 	"errors"
 	"fmt"
-	"webtodo/db"
 	"webtodo/models"
 
 	"gorm.io/gorm"
@@ -12,7 +11,7 @@ import (
 var ErrUserNotFound = fmt.Errorf("user not found")
 
 func AddUser(user *models.User) (uint, error) {
-	if err := db.GetDBConn().Create(&user).Error; err != nil {
+	if err := GetDBConn().Create(&user).Error; err != nil {
 		return 0, err
 	}
 	return user.Id, nil
@@ -100,7 +99,7 @@ func AddUser(user *models.User) (uint, error) {
 
 func GetUserByUserAndPassword(username, password string) (uint, error) {
 	var user models.User
-	if err := db.GetDBConn().Where("username = ? AND password = ?", username, password).First(&user).Error; err != nil {
+	if err := GetDBConn().Where("username = ? AND password = ?", username, password).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return 0, errors.New("incorrect login or password")
 		}
