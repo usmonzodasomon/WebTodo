@@ -2,7 +2,7 @@ package service
 
 import (
 	"webtodo/models"
-	"webtodo/repository"
+	"webtodo/pkg/repository"
 )
 
 func GetTaskById(id, userId uint) (*models.Task, error) {

@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"webtodo"
 	"webtodo/db"
-	"webtodo/handlers"
+	"webtodo/pkg/handlers"
 
 	_ "github.com/lib/pq"
 )

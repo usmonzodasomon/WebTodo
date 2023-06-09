@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"time"
-	"webtodo/repository"
+	"webtodo/pkg/repository"
 
 	"github.com/dgrijalva/jwt-go"
 )
