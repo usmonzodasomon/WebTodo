@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (t *app) AuthMiddleware(c *gin.Context) {
+func (h *handler) AuthMiddleware(c *gin.Context) {
 	header := c.GetHeader("Authorization")
 
 	if header == "" {

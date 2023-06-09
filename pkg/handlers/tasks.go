@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"strconv"
 	"webtodo/models"
@@ -25,17 +24,8 @@ import (
 // 	"gorm.io/gorm"
 // )
 
-type app struct {
-	l  *log.Logger
-	db *gorm.DB
-}
-
-func NewTasks(l *log.Logger, db *gorm.DB) *app {
-	return &app{l, db}
-}
-
-func (t *app) GetTaskById(c *gin.Context) {
-	t.l.Println("Get Task By Id")
+func (h *handler) GetTaskById(c *gin.Context) {
+	h.l.Println("Get Task By Id")
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil || id < 1 {
@@ -56,8 +46,8 @@ func (t *app) GetTaskById(c *gin.Context) {
 	c.JSON(http.StatusOK, task)
 }
 
-func (t *app) GetExpiredTasksByUser(c *gin.Context) {
-	t.l.Println("Get Expired Tasks By User")
+func (h *handler) GetExpiredTasksByUser(c *gin.Context) {
+	h.l.Println("Get Expired Tasks By User")
 	userId, ok := c.Get("userId")
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"reason": "error getting userId from header"})
@@ -71,8 +61,8 @@ func (t *app) GetExpiredTasksByUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"tasks": tasks})
 }
 
-func (t *app) GetTasks(c *gin.Context) {
-	t.l.Println("Get Tasks")
+func (h *handler) GetTasks(c *gin.Context) {
+	h.l.Println("Get Tasks")
 	userId, ok := c.Get("userId")
 	if !ok {
 		c.JSON(http.StatusInternalServerError, gin.H{"reason": "error getting userId from header"})
@@ -89,8 +79,8 @@ func (t *app) GetTasks(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
-func (t *app) AddTask(c *gin.Context) {
-	t.l.Println("Add Task")
+func (h *handler) AddTask(c *gin.Context) {
+	h.l.Println("Add Task")
 	var task models.Task
 	if err := c.ShouldBindJSON(&task); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
@@ -114,8 +104,8 @@ type Numbers struct {
 	NewUserId uint `json:"new_user_id"`
 }
 
-func (t *app) ReassignTask(c *gin.Context) {
-	t.l.Println("Reassign Task")
+func (h *handler) ReassignTask(c *gin.Context) {
+	h.l.Println("Reassign Task")
 	var numbers Numbers
 	if err := c.BindJSON(&numbers); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
@@ -130,8 +120,8 @@ func (t *app) ReassignTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"reason": "success"})
 }
 
-// func (t *app) UpdateTask(c *gin.Context) {
-// 	t.l.Println("Update Task")
+// func (h *handler) UpdateTask(c *gin.Context) {
+// 	h.l.Println("Update Task")
 // 	id, err := strconv.Atoi(c.Param("id"))
 // 	if err != nil {
 // 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
@@ -164,8 +154,8 @@ func (t *app) ReassignTask(c *gin.Context) {
 // 	c.JSON(http.StatusOK, gin.H{"reason": "Задача успешно обновлена!"})
 // }
 
-func (t *app) DeleteTask(c *gin.Context) {
-	t.l.Println("Delete Task")
+func (h *handler) DeleteTask(c *gin.Context) {
+	h.l.Println("Delete Task")
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})

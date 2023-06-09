@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (t *app) SignUp(c *gin.Context) {
+func (h *handler) SignUp(c *gin.Context) {
 	var user models.User
 
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -27,8 +27,8 @@ func (t *app) SignUp(c *gin.Context) {
 	})
 }
 
-func (t *app) SignIn(c *gin.Context) {
-	t.l.Println("Signing in")
+func (h *handler) SignIn(c *gin.Context) {
+	h.l.Println("Signing in")
 
 	var user models.User
 	if err := c.BindJSON(&user); err != nil {

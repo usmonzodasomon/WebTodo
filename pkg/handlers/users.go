@@ -10,8 +10,8 @@ package handlers
 // 	"github.com/gin-gonic/gin"
 // )
 
-// func (t *app) GetUserById(c *gin.Context) {
-// 	t.l.Println("Get User By Id")
+// func (h *handler) GetUserById(c *gin.Context) {
+// 	h.l.Println("Get User By Id")
 
 // 	id, err := strconv.Atoi(c.Param("id"))
 // 	if err != nil {
@@ -28,8 +28,8 @@ package handlers
 // 	c.JSON(http.StatusOK, user)
 // }
 
-// func (t *app) GetUsers(c *gin.Context) {
-// 	t.l.Println("Get Users")
+// func (h *handler) GetUsers(c *gin.Context) {
+// 	h.l.Println("Get Users")
 // 	userId, ok := c.Get("userId")
 // 	if !ok {
 // 		c.JSON(http.StatusInternalServerError, gin.H{"reason": "user id not found in auth header"})
@@ -46,8 +46,8 @@ package handlers
 // 	c.JSON(http.StatusOK, users)
 // }
 
-// func (t *app) GetUserTasks(c *gin.Context) {
-// 	t.l.Println("Get User Task")
+// func (h *handler) GetUserTasks(c *gin.Context) {
+// 	h.l.Println("Get User Task")
 // 	id, err := strconv.Atoi(c.Param("id"))
 // 	if err != nil {
 // 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
@@ -61,8 +61,8 @@ package handlers
 // 	c.JSON(http.StatusOK, tasks)
 // }
 
-// // func (t *app) AddUser(c *gin.Context) {
-// // 	t.l.Println("Add User")
+// // func (h *handler) AddUser(c *gin.Context) {
+// // 	h.l.Println("Add User")
 // // 	var user models.User
 // // 	if err := c.BindJSON(&user); err != nil {
 // // 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
@@ -76,8 +76,8 @@ package handlers
 // // 	c.JSON(http.StatusCreated, gin.H{"id": id})
 // // }
 
-// func (t *app) UpdateUser(c *gin.Context) {
-// 	t.l.Println("Update User")
+// func (h *handler) UpdateUser(c *gin.Context) {
+// 	h.l.Println("Update User")
 // 	id, err := strconv.Atoi(c.Param("id"))
 // 	if err != nil {
 // 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
@@ -106,8 +106,8 @@ package handlers
 // 	c.JSON(http.StatusOK, gin.H{"reason": "Задача успешно обновлена!"})
 // }
 
-// func (t *app) DeleteUser(c *gin.Context) {
-// 	t.l.Println("Delete User")
+// func (h *handler) DeleteUser(c *gin.Context) {
+// 	h.l.Println("Delete User")
 // 	id, err := strconv.Atoi(c.Param("id"))
 // 	if err != nil {
 // 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})

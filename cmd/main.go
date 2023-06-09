@@ -10,6 +10,8 @@ import (
 	"webtodo"
 	"webtodo/db"
 	"webtodo/pkg/handlers"
+	"webtodo/pkg/repository"
+	"webtodo/service"
 
 	_ "github.com/lib/pq"
 )
@@ -17,10 +19,13 @@ import (
 func main() {
 	l := log.New(os.Stdout, "LOG ", log.Ldate|log.Ltime)
 	db.StartDbConnection()
-	app := handlers.NewTasks(l, db.GetDBConn())
+	repos := repository.NewRepository()
+	services := service.NewService(repos)
+	handler := handlers.NewHandler(services, l)
+	//	app := handlers.NewTasks(l, db.GetDBConn())
 	MyServer := new(webtodo.Server)
 	go func() {
-		if err := MyServer.Run("9191", app.Routes()); err != nil {
+		if err := MyServer.Run("9191", handler.Routes()); err != nil {
 			l.Printf("Error while starting server %s", err.Error())
 			return
 		}
