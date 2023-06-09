@@ -14,9 +14,13 @@ import (
 	"webtodo/service"
 
 	_ "github.com/lib/pq"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	if err := initConfig(); err != nil {
+		log.Fatalf("error initializing configs: %s", err.Error())
+	}
 	l := log.New(os.Stdout, "LOG ", log.Ldate|log.Ltime)
 	db.StartDbConnection()
 	repos := repository.NewRepository()
@@ -25,7 +29,7 @@ func main() {
 	//	app := handlers.NewTasks(l, db.GetDBConn())
 	MyServer := new(webtodo.Server)
 	go func() {
-		if err := MyServer.Run("9191", handler.Routes()); err != nil {
+		if err := MyServer.Run(viper.GetString("port"), handler.Routes()); err != nil {
 			l.Printf("Error while starting server %s", err.Error())
 			return
 		}
@@ -44,4 +48,10 @@ func main() {
 	if err := MyServer.Shutdown(context.Background()); err != nil {
 		l.Printf("Error server shutting down: %s", err.Error())
 	}
+}
+
+func initConfig() error {
+	viper.AddConfigPath("configs")
+	viper.SetConfigName("config")
+	return viper.ReadInConfig()
 }
