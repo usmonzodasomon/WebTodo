@@ -42,7 +42,7 @@ func (r *TodoPostgres) ReassignTask(taskID, userID uint) error {
 func (r *TodoPostgres) GetTaskById(id, userId uint) (*models.Task, error) {
 	var task models.Task
 	if err := GetDBConn().Where("id = ? AND user_id = ?", id, userId).First(&task).Error; err != nil {
-		return nil, err
+		return nil, ErrTaskNotFound
 	}
 	return &task, nil
 }
@@ -55,19 +55,36 @@ func (r *TodoPostgres) GetExpiredTasksByUser(userId uint) ([]int, error) {
 	return tasks, nil
 }
 
-// func UpdateTask(id int, userId int) error {
-// 	// _, err := findTask(id, userId)
-// 	// if err != nil {
-// 	// 	return err
-// 	// }
+func (r *TodoPostgres) UpdateTask(input models.Update, id, userId uint) error {
+	task, err := r.GetTaskById(id, userId)
+	if err != nil {
+		return ErrTaskNotFound
+	}
+	if input.Title != nil {
+		if err := r.db.Model(task).Where("id = ? AND user_id = ?", id, userId).Update("title", input.Title).Error; err != nil {
+			return err
+		}
+	}
 
-// 	stmt := "UPDATE tasks SET title = $1, description = $2, completed = $3, user_id = $4, deadline = $5 WHERE id = $6 AND user_id = $7"
-// 	_, err = db.GetDBConn().Exec(stmt, task.Title, task.Description, task.IsCompleted, task.UserId, task.Deadline, id, userId)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
+	if input.Description != nil {
+		if err := r.db.Model(task).Where("id = ? AND user_id = ?", id, userId).Update("description", input.Description).Error; err != nil {
+			return err
+		}
+	}
+
+	if input.IsCompleted != nil {
+		if err := r.db.Model(task).Where("id = ? AND user_id = ?", id, userId).Update("is_completed", input.IsCompleted).Error; err != nil {
+			return err
+		}
+	}
+
+	if input.Deadline != nil {
+		if err := r.db.Model(task).Where("id = ? AND user_id = ?", id, userId).Update("deadline", input.Deadline).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
 func (r *TodoPostgres) DeleteTask(id, userId uint) error {
 	if err := GetDBConn().Where("user_id = ? AND id = ?", userId, id).Delete(&models.Task{}).Error; err != nil {

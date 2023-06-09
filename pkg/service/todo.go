@@ -25,6 +25,10 @@ func (s *TodoService) GetAllTasks(userId uint) ([]*models.Task, error) {
 	return s.repo.GetAllTasks(userId)
 }
 
+func (s *TodoService) UpdateTask(input models.Update, id, userId uint) error {
+	return s.repo.UpdateTask(input, id, userId)
+}
+
 func (s *TodoService) DeleteTask(id, userId uint) error {
 	return s.repo.DeleteTask(id, userId)
 }

@@ -29,7 +29,7 @@ func (h *handler) Routes() *gin.Engine {
 		tasks.GET("/expired_tasks_by_user", h.GetExpiredTasksByUser)
 		tasks.POST("/", h.AddTask)
 		tasks.POST("/reassign_task", h.ReassignTask)
-		// tasks.PUT("/:id", h.UpdateTask)
+		tasks.PUT("/:id", h.UpdateTask)
 		tasks.DELETE("/:id", h.DeleteTask)
 	}
 

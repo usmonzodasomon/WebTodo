@@ -17,6 +17,7 @@ type Todo interface {
 	ReassignTask(taskID, userID uint) error
 	GetTaskById(id, userId uint) (*models.Task, error)
 	GetExpiredTasksByUser(userId uint) ([]int, error)
+	UpdateTask(input models.Update, id uint, userId uint) error
 	DeleteTask(id, userId uint) error
 }
 

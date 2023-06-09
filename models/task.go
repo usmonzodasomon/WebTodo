@@ -5,7 +5,6 @@ import (
 )
 
 type Task struct {
-	// gorm.Model
 	Id          uint      `json:"id" gorm:"primaryKey"`
 	Title       string    `json:"title" binding:"required" gorm:"not null; unique"`
 	Description string    `json:"description"`
@@ -16,4 +15,9 @@ type Task struct {
 	User        User      `json:"-" gorm:"foreignKey:UserId"`
 }
 
-// gorm:
+type Update struct {
+	Title       *string
+	Description *string
+	IsCompleted *bool
+	Deadline    *uint
+}
