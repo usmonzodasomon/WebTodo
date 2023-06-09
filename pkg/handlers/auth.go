@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 	"webtodo/models"
-	"webtodo/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,18 +10,18 @@ import (
 func (h *handler) SignUp(c *gin.Context) {
 	var user models.User
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.BindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"reason": "invalid input body"})
 		return
 	}
 
-	id, err := service.AddUser(&user)
+	id, err := h.services.Authorization.AddUser(&user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
+	c.JSON(http.StatusOK, gin.H{
 		"id": id,
 	})
 }
@@ -36,7 +35,7 @@ func (h *handler) SignIn(c *gin.Context) {
 		return
 	}
 
-	token, err := service.GenerateToken(user.Username, user.Password)
+	token, err := h.services.Authorization.GenerateToken(user.Username, user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return

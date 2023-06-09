@@ -24,7 +24,9 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("error loading env variables: %s", err.Error())
 	}
+
 	l := log.New(os.Stdout, "LOG ", log.Ldate|log.Ltime)
+
 	repository.StartDbConnection(&repository.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
@@ -33,10 +35,11 @@ func main() {
 		SSLMode:  viper.GetString("db.sslmode"),
 		Password: os.Getenv("DB_PASSWORD"),
 	})
-	repos := repository.NewRepository()
+
+	repos := repository.NewRepository(repository.GetDBConn())
 	services := service.NewService(repos)
 	handler := handlers.NewHandler(services, l)
-	//	app := handlers.NewTasks(l, db.GetDBConn())
+
 	MyServer := new(webtodo.Server)
 	go func() {
 		if err := MyServer.Run(viper.GetString("port"), handler.Routes()); err != nil {

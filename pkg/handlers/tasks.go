@@ -5,24 +5,30 @@ import (
 	"net/http"
 	"strconv"
 	"webtodo/models"
-	"webtodo/service"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-// import (
-// 	"database/sql"
-// 	"errors"
-// 	"log"
-// 	"net/http"
-// 	"strconv"
-// 	"webtodo/models"
-// 	"webtodo/repository"
-
-// 	"github.com/gin-gonic/gin"
-// 	"gorm.io/gorm"
-// )
+func (h *handler) AddTask(c *gin.Context) {
+	h.l.Println("Add Task")
+	var task models.Task
+	if err := c.BindJSON(&task); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
+		return
+	}
+	userId, err := getUserId(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
+		return
+	}
+	task.UserId = userId
+	id, err := h.services.Todo.Add(&task)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
+	}
+	c.JSON(http.StatusCreated, gin.H{"id": id})
+}
 
 func (h *handler) GetTaskById(c *gin.Context) {
 	h.l.Println("Get Task By Id")
@@ -32,12 +38,14 @@ func (h *handler) GetTaskById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
 		return
 	}
-	userId, ok := c.Get("userId")
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"reason": "error getting userId from header"})
+
+	userId, err := getUserId(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return
 	}
-	task, err := service.GetTaskById(uint(id), userId.(uint))
+
+	task, err := h.services.Todo.GetTaskById(uint(id), userId)
 
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"reason": err.Error()})
@@ -48,12 +56,12 @@ func (h *handler) GetTaskById(c *gin.Context) {
 
 func (h *handler) GetExpiredTasksByUser(c *gin.Context) {
 	h.l.Println("Get Expired Tasks By User")
-	userId, ok := c.Get("userId")
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"reason": "error getting userId from header"})
+	userId, err := getUserId(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return
 	}
-	tasks, err := service.GetExpiredTasksByUser(userId.(uint))
+	tasks, err := h.services.Todo.GetExpiredTasksByUser(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return
@@ -63,12 +71,12 @@ func (h *handler) GetExpiredTasksByUser(c *gin.Context) {
 
 func (h *handler) GetTasks(c *gin.Context) {
 	h.l.Println("Get Tasks")
-	userId, ok := c.Get("userId")
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"reason": "error getting userId from header"})
+	userId, err := getUserId(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return
 	}
-	tasks, err := service.GetAllTasks(userId.(uint))
+	tasks, err := h.services.Todo.GetAllTasks(userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"reason": "task not found"})
@@ -77,26 +85,6 @@ func (h *handler) GetTasks(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, tasks)
-}
-
-func (h *handler) AddTask(c *gin.Context) {
-	h.l.Println("Add Task")
-	var task models.Task
-	if err := c.ShouldBindJSON(&task); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
-		return
-	}
-	userId, ok := c.Get("userId")
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"reason": "user id not found in auth header"})
-		return
-	}
-	task.UserId = userId.(uint)
-	id, err := service.AddTask(&task)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
-	}
-	c.JSON(http.StatusCreated, gin.H{"id": id})
 }
 
 type Numbers struct {
@@ -112,7 +100,7 @@ func (h *handler) ReassignTask(c *gin.Context) {
 		return
 	}
 
-	err := service.ReassignTask(numbers.TaskID, numbers.NewUserId)
+	err := h.services.Todo.ReassignTask(numbers.TaskID, numbers.NewUserId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return
@@ -161,9 +149,9 @@ func (h *handler) DeleteTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"reason": err.Error()})
 		return
 	}
-	userId, ok := c.Get("userId")
-	if !ok {
-		c.JSON(http.StatusInternalServerError, gin.H{"reason": "error getting userId from header"})
+	userId, err := getUserId(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return
 	}
 	// task, err := repository.GetTaskById(uint(id), userId.(uint))
@@ -171,7 +159,7 @@ func (h *handler) DeleteTask(c *gin.Context) {
 	// 	c.JSON(http.StatusNotFound, gin.H{"reason": err.Error()})
 	// 	return
 	// }
-	err = service.DeleteTask(uint(id), userId.(uint))
+	err = h.services.DeleteTask(uint(id), userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 		return

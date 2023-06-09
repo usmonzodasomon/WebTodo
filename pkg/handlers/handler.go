@@ -18,6 +18,10 @@ func NewHandler(services *service.Service, l *log.Logger) *handler {
 
 func (h *handler) Routes() *gin.Engine {
 	router := gin.New()
+
+	router.POST("/sign-up", h.SignUp)
+	router.POST("/sign-in", h.SignIn)
+
 	tasks := router.Group("/task", h.AuthMiddleware)
 	{
 		tasks.GET("/", h.GetTasks)
@@ -28,17 +32,6 @@ func (h *handler) Routes() *gin.Engine {
 		// tasks.PUT("/:id", h.UpdateTask)
 		tasks.DELETE("/:id", h.DeleteTask)
 	}
-
-	// users := router.Group("/user")
-	// {
-	// 	users.GET("/", h.GetUsers)
-	// 	// users.GET("/user_tasks/:id", h.GetUserTasks)
-	// 	// users.GET("/user/:id", h.GetUserById)
-	// 	// users.PUT("/user/:id", h.UpdateUser)
-	// 	// users.DELETE("/user/:id", h.DeleteUser)
-	// }
-	router.POST("/sign-up", h.SignUp)
-	router.POST("/sign-in", h.SignIn)
 
 	return router
 }
