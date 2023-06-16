@@ -16,8 +16,8 @@ type Task struct {
 }
 
 type Update struct {
-	Title       *string
-	Description *string
-	IsCompleted *bool
-	Deadline    *uint
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	IsCompleted *bool   `json:"is_completed"`
+	Deadline    *uint   `json:"deadline"`
 }

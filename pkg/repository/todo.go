@@ -92,17 +92,3 @@ func (r *TodoPostgres) DeleteTask(id, userId uint) error {
 	}
 	return nil
 }
-
-// func findTask(id, userId uint) (int, error) {
-// 	stmt := "SELECT * FROM tasks WHERE id = $1 AND user_id = $2"
-// 	task := &models.Task{}
-// 	err := db.GetDBConn().QueryRow(stmt, id, userId).Scan(&task.Id, &task.Title, &task.Description, &task.IsCompleted, &task.UserId, &task.CreatedAt, &task.Deadline)
-// 	if err != nil {
-// 		if errors.Is(err, sql.ErrNoRows) {
-// 			return 0, ErrTaskNotFound
-// 		} else {
-// 			return 0, err
-// 		}
-// 	}
-// 	return task.Id, nil
-// }

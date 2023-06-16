@@ -1,19 +1,19 @@
 package handlers
 
 import (
-	"log"
 	"webtodo/pkg/service"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type handler struct {
 	services *service.Service
-	l        *log.Logger
+	logs     *logrus.Logger
 }
 
-func NewHandler(services *service.Service, l *log.Logger) *handler {
-	return &handler{services, l}
+func NewHandler(services *service.Service, logs *logrus.Logger) *handler {
+	return &handler{services, logs}
 }
 
 func (h *handler) Routes() *gin.Engine {
@@ -28,7 +28,6 @@ func (h *handler) Routes() *gin.Engine {
 		tasks.GET("/:id", h.GetTaskById)
 		tasks.GET("/expired_tasks_by_user", h.GetExpiredTasksByUser)
 		tasks.POST("/", h.AddTask)
-		tasks.POST("/reassign_task", h.ReassignTask)
 		tasks.PUT("/:id", h.UpdateTask)
 		tasks.DELETE("/:id", h.DeleteTask)
 	}

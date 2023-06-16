@@ -12,20 +12,22 @@ import (
 	"webtodo/pkg/repository"
 	"webtodo/pkg/service"
 
+	"webtodo/logger"
+
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 )
 
 func main() {
+	l := logger.GetLogger()
+	defer logger.CloseFile()
 	if err := initConfig(); err != nil {
 		log.Fatalf("error initializing configs: %s", err.Error())
 	}
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("error loading env variables: %s", err.Error())
 	}
-
-	l := log.New(os.Stdout, "LOG ", log.Ldate|log.Ltime)
 
 	repository.StartDbConnection(&repository.Config{
 		Host:     viper.GetString("db.host"),
@@ -35,7 +37,6 @@ func main() {
 		SSLMode:  viper.GetString("db.sslmode"),
 		Password: os.Getenv("DB_PASSWORD"),
 	})
-
 	repos := repository.NewRepository(repository.GetDBConn())
 	services := service.NewService(repos)
 	handler := handlers.NewHandler(services, l)

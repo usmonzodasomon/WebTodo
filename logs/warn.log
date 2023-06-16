@@ -1,0 +1,52 @@
+time="2023-06-15T21:38:33+05:00" level=warning msg=someWarn
+time="2023-06-16T01:02:40+05:00" level=info msg="someInfo in Program" func=main.main file="C:/Projects/WebTodo/cmd/main.go:24"
+time="2023-06-16T01:02:40+05:00" level=error msg=someError func=main.main file="C:/Projects/WebTodo/cmd/main.go:25"
+time="2023-06-16T01:03:41+05:00" level=info msg="someInfo in Program" func=main.main file="C:/Projects/WebTodo/cmd/main.go:24"
+time="2023-06-16T01:03:41+05:00" level=error msg=someError func=main.main file="C:/Projects/WebTodo/cmd/main.go:25"
+time="2023-06-16T01:03:52+05:00" level=info msg="someInfo in Program" func=main.main file="C:/Projects/WebTodo/cmd/main.go:24"
+time="2023-06-16T01:03:52+05:00" level=error msg=someError func=main.main file="C:/Projects/WebTodo/cmd/main.go:25"
+time="2023-06-16T01:09:57+05:00" level=info msg="someInfo in Program" func=main.main file="C:/Projects/WebTodo/cmd/main.go:24"
+time="2023-06-16T01:09:57+05:00" level=error msg=someError func=main.main file="C:/Projects/WebTodo/cmd/main.go:25"
+time="2023-06-16T01:10:37+05:00" level=info msg="someInfo in Program" func=main.main file="C:/Projects/WebTodo/cmd/main.go:24"
+time="2023-06-16T01:10:37+05:00" level=error msg=someError func=main.main file="C:/Projects/WebTodo/cmd/main.go:25"
+{"file":"C:/Projects/WebTodo/cmd/main.go:24","func":"main.main","level":"info","msg":"someInfo in Program","time":"2023-06-16T01:11:20+05:00"}
+{"file":"C:/Projects/WebTodo/cmd/main.go:25","func":"main.main","level":"error","msg":"someError","time":"2023-06-16T01:11:20+05:00"}
+[36mINFO[0m[0000]C:/Projects/WebTodo/cmd/main.go:24 main.main() someInfo in Program                          
+[31mERRO[0m[0000]C:/Projects/WebTodo/cmd/main.go:25 main.main() someError                                    
+[36mINFO[0m[0000]C:/Projects/WebTodo/cmd/main.go:24 main.main() someInfo in Program                          
+[36mINFO[0m[0000]C:/Projects/WebTodo/cmd/main.go:25 main.main() someInfo in Program2                         
+[31mERRO[0m[0000]C:/Projects/WebTodo/cmd/main.go:26 main.main() someError                                    
+[31mERRO[0m[0000]C:/Projects/WebTodo/cmd/main.go:24 main.main() some error today                             
+[36mINFO[0m[0037]C:/Projects/WebTodo/pkg/handlers/auth.go:34 webtodo/pkg/handlers.(*handler).SignIn() Signing in                                   
+[36mINFO[0m[0054]C:/Projects/WebTodo/pkg/handlers/tasks.go:86 webtodo/pkg/handlers.(*handler).GetTasks() Getting Tasks                                
+[36mINFO[0m[0054]C:/Projects/WebTodo/pkg/handlers/tasks.go:103 webtodo/pkg/handlers.(*handler).GetTasks() All tasks received succesfully               
+[36mINFO[0m[0068]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0068]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0115]C:/Projects/WebTodo/pkg/handlers/tasks.go:128 webtodo/pkg/handlers.(*handler).UpdateTask() Updating Task                                
+[36mINFO[0m[0115]C:/Projects/WebTodo/pkg/handlers/tasks.go:160 webtodo/pkg/handlers.(*handler).UpdateTask() Task with Id 17 updated succesfully          
+[36mINFO[0m[0119]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0119]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0254]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0254]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0261]C:/Projects/WebTodo/pkg/handlers/tasks.go:128 webtodo/pkg/handlers.(*handler).UpdateTask() Updating Task                                
+[36mINFO[0m[0261]C:/Projects/WebTodo/pkg/handlers/tasks.go:160 webtodo/pkg/handlers.(*handler).UpdateTask() Task with Id 17 updated succesfully          
+[36mINFO[0m[0264]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0264]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0451]C:/Projects/WebTodo/pkg/handlers/tasks.go:128 webtodo/pkg/handlers.(*handler).UpdateTask() Updating Task                                
+[36mINFO[0m[0451]C:/Projects/WebTodo/pkg/handlers/tasks.go:160 webtodo/pkg/handlers.(*handler).UpdateTask() Task with Id 17 updated succesfully          
+[36mINFO[0m[0454]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0454]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0010]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0010]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0019]C:/Projects/WebTodo/pkg/handlers/tasks.go:128 webtodo/pkg/handlers.(*handler).UpdateTask() Updating Task                                
+[36mINFO[0m[0019]C:/Projects/WebTodo/pkg/handlers/tasks.go:160 webtodo/pkg/handlers.(*handler).UpdateTask() Task with Id 17 updated succesfully          
+[36mINFO[0m[0003]C:/Projects/WebTodo/pkg/handlers/tasks.go:128 webtodo/pkg/handlers.(*handler).UpdateTask() Updating Task                                
+[37mDEBU[0m[0003]C:/Projects/WebTodo/pkg/repository/todo.go:76 webtodo/pkg/repository.(*TodoPostgres).UpdateTask() input.IsCompleted = <nil>                    
+[36mINFO[0m[0003]C:/Projects/WebTodo/pkg/handlers/tasks.go:160 webtodo/pkg/handlers.(*handler).UpdateTask() Task with Id 17 updated succesfully          
+[36mINFO[0m[0010]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0010]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
+[36mINFO[0m[0005]C:/Projects/WebTodo/pkg/handlers/tasks.go:128 webtodo/pkg/handlers.(*handler).UpdateTask() Updating Task                                
+[37mDEBU[0m[0005]C:/Projects/WebTodo/pkg/repository/todo.go:76 webtodo/pkg/repository.(*TodoPostgres).UpdateTask() input.IsCompleted = 0xc0000a77cc             
+[36mINFO[0m[0005]C:/Projects/WebTodo/pkg/handlers/tasks.go:160 webtodo/pkg/handlers.(*handler).UpdateTask() Task with Id 17 updated succesfully          
+[36mINFO[0m[0012]C:/Projects/WebTodo/pkg/handlers/tasks.go:40 webtodo/pkg/handlers.(*handler).GetTaskById() Getting Task By Id                           
+[36mINFO[0m[0012]C:/Projects/WebTodo/pkg/handlers/tasks.go:64 webtodo/pkg/handlers.(*handler).GetTaskById() Task with Id 17 received succesfully         
