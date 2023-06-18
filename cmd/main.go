@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -23,10 +21,10 @@ func main() {
 	l := logger.GetLogger()
 	defer logger.CloseFile()
 	if err := initConfig(); err != nil {
-		log.Fatalf("error initializing configs: %s", err.Error())
+		l.Fatalf("error initializing configs: %s", err.Error())
 	}
 	if err := godotenv.Load(); err != nil {
-		log.Fatalf("error loading env variables: %s", err.Error())
+		l.Fatalf("error loading env variables: %s", err.Error())
 	}
 
 	repository.StartDbConnection(&repository.Config{
@@ -44,23 +42,23 @@ func main() {
 	MyServer := new(webtodo.Server)
 	go func() {
 		if err := MyServer.Run(viper.GetString("port"), handler.Routes()); err != nil {
-			l.Printf("Error while starting server %s", err.Error())
+			l.Errorf("Error while starting server %s", err.Error())
 			return
 		}
 	}()
-	fmt.Println("Server is starting...")
+	l.Info("Server is starting...")
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
 
 	if err := repository.CloseDbConnection(); err != nil {
-		l.Printf("error occurred on database connection closing: %s", err.Error())
+		l.Errorf("error occurred on database connection closing: %s", err.Error())
 	}
 
-	fmt.Println("Shutting down")
+	l.Info("Shutting down")
 	if err := MyServer.Shutdown(context.Background()); err != nil {
-		l.Printf("Error server shutting down: %s", err.Error())
+		l.Errorf("Error server shutting down: %s", err.Error())
 	}
 }
 

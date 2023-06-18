@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"webtodo/logger"
 	"webtodo/models"
 
 	_ "github.com/lib/pq"
@@ -26,6 +27,7 @@ func initDB(cnf *Config) *gorm.DB {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	// CreateTables(db)
 	if err != nil {
+		logger.GetLogger().Error(err)
 		panic(err)
 	}
 	db.AutoMigrate(&models.User{}, &models.Task{})
@@ -51,18 +53,3 @@ func CloseDbConnection() error {
 	}
 	return nil
 }
-
-// func CreateTables(db *sql.DB) {
-// 	DDLs := []string{
-// 		CreateUsersTable,
-// 		CreateTasksTable,
-// 		CreateGetExpiredTasksByUserFunc,
-// 		CreateReassignTaskProcedure,
-// 	}
-
-// 	for _, ddl := range DDLs {
-// 		if _, err := db.Exec(ddl); err != nil {
-// 			log.Fatal("Error while creating table. Error is: ", err)
-// 		}
-// 	}
-// }
