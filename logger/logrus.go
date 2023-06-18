@@ -41,40 +41,31 @@ func init() {
 
 	logger.AddHook(&fileHook{
 		LevelsArr: []logrus.Level{
-			logrus.DebugLevel,
-			logrus.InfoLevel,
-			logrus.WarnLevel,
 			logrus.ErrorLevel,
+			logrus.WarnLevel,
+			logrus.InfoLevel,
+			logrus.DebugLevel,
 		},
 		Files: map[logrus.Level]*os.File{
-			logrus.DebugLevel: debugFile,
-			logrus.InfoLevel:  infoFile,
-			logrus.WarnLevel:  warnFile,
 			logrus.ErrorLevel: errorFile,
+			logrus.WarnLevel:  warnFile,
+			logrus.InfoLevel:  infoFile,
+			logrus.DebugLevel: debugFile,
 		},
-		Writer: []io.Writer{colorable.NewColorableStdout(), debugFile, infoFile, warnFile, errorFile},
 	})
 }
 
 type fileHook struct {
 	LevelsArr []logrus.Level
-	Writer    []io.Writer
 	Files     map[logrus.Level]*os.File
 }
 
 func (hook *fileHook) Fire(entry *logrus.Entry) error {
 	for _, level := range hook.LevelsArr {
-		if entry.Level >= level {
-			entry.Logger.Out = hook.Files[level]
+		if entry.Level <= level {
+			entry.Logger.Out = io.MultiWriter(hook.Files[level], colorable.NewColorableStdout())
 			break
 		}
-	}
-	line, err := entry.String()
-	if err != nil {
-		return err
-	}
-	for _, w := range hook.Writer {
-		w.Write([]byte(line))
 	}
 	return nil
 }
